@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -7,22 +8,22 @@ export default function Footer() {
     {
       name: 'GitHub',
       url: 'https://github.com/MCKesav',
-      icon: '🔗',
+      icon: '/icons/github dark theme.svg',
     },
     {
       name: 'LinkedIn',
       url: 'https://www.linkedin.com/in/mckesav',
-      icon: '💼',
+      icon: '/icons/linkedin.svg',
     },
     {
       name: 'LeetCode',
       url: 'https://leetcode.com/u/Movva_Chenna_Kesav',
-      icon: '💻',
+      icon: '/icons/leetcode dark theme.svg',
     },
     {
-      name: 'Email',
+      name: 'Gmail',
       url: 'mailto:movva.chenna.kesav@gmail.com',
-      icon: '✉️',
+      icon: '/icons/gmail.svg',
     },
   ];
 
@@ -69,18 +70,32 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-white mb-4">Connect</h4>
             <div className="flex space-x-4">
-              {socialLinks.map((link) => (
+              {socialLinks.map((link) => {
+                const hoverColors = {
+                  GitHub: 'hover:from-slate-300/30 hover:to-white/20 hover:border-slate-300/60',
+                  LinkedIn: 'hover:from-blue-500/20 hover:to-blue-600/20 hover:border-blue-500/50',
+                  LeetCode: 'hover:from-orange-500/20 hover:to-yellow-500/20 hover:border-orange-500/50',
+                  Gmail: 'hover:from-green-500/20 hover:to-emerald-500/20 hover:border-green-500/50',
+                };
+                return (
                 <a
                   key={link.name}
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-2xl hover:scale-110 transition-transform"
+                  className={`p-2 rounded-lg bg-gradient-to-br from-slate-700/50 to-slate-800/50 hover:scale-110 transition-all duration-300 backdrop-blur-sm border border-slate-600/30 ${hoverColors[link.name as keyof typeof hoverColors]}`}
                   title={link.name}
                 >
-                  {link.icon}
+                  <Image
+                    src={link.icon}
+                    alt={link.name}
+                    width={24}
+                    height={24}
+                    className="transition-opacity"
+                  />
                 </a>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

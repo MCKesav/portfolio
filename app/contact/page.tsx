@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { Metadata } from 'next';
+import Image from 'next/image';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -56,27 +56,27 @@ export default function Contact() {
   const socialLinks = [
     {
       name: 'GitHub',
-      icon: '🔗',
+      icon: '/icons/github dark theme.svg',
       url: 'https://github.com/MCKesav',
-      color: 'hover:text-blue-400',
+      color: 'hover:from-slate-300/40 hover:to-white/30 hover:border-slate-300/60',
     },
     {
       name: 'LinkedIn',
-      icon: '💼',
+      icon: '/icons/linkedin.svg',
       url: 'https://www.linkedin.com/in/mckesav',
-      color: 'hover:text-cyan-400',
+      color: 'hover:from-blue-500/30 hover:to-blue-600/30 hover:border-blue-500/50',
     },
     {
       name: 'LeetCode',
-      icon: '💻',
+      icon: '/icons/leetcode dark theme.svg',
       url: 'https://leetcode.com/u/Movva_Chenna_Kesav',
-      color: 'hover:text-yellow-400',
+      color: 'hover:from-orange-500/30 hover:to-yellow-500/30 hover:border-orange-500/50',
     },
     {
-      name: 'Email',
-      icon: '✉️',
+      name: 'Gmail',
+      icon: '/icons/gmail.svg',
       url: 'mailto:movva.chenna.kesav@gmail.com',
-      color: 'hover:text-green-400',
+      color: 'hover:from-green-500/30 hover:to-emerald-500/30 hover:border-green-500/50',
     },
   ];
 
@@ -135,10 +135,17 @@ export default function Contact() {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg transition-all duration-300 ${social.color} hover:scale-105`}
+                    className={`flex items-center gap-3 p-4 bg-gradient-to-br from-slate-700/50 to-slate-800/50 rounded-lg transition-all duration-300 hover:scale-105 border border-slate-600/30 backdrop-blur-sm ${social.color}`}
                   >
-                    <span className="text-2xl">{social.icon}</span>
-                    <span className="text-gray-300">{social.name}</span>
+                    <div className="p-2 rounded-lg bg-slate-800/50">
+                      <Image
+                        src={social.icon}
+                        alt={social.name}
+                        width={24}
+                        height={24}
+                      />
+                    </div>
+                    <span className="text-gray-300 font-medium">{social.name}</span>
                   </a>
                 ))}
               </div>

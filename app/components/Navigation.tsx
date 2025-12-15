@@ -1,14 +1,24 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { href: '/', label: 'Home' },
@@ -19,21 +29,32 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-slate-900 text-white shadow-lg">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      isScrolled 
+        ? 'mt-4 mx-auto max-w-fit bg-white/10 backdrop-blur-2xl rounded-full border border-white/20 shadow-2xl shadow-black/20' 
+        : 'bg-slate-950/20 backdrop-blur-md border-b border-slate-700/20'
+    }`}>
+      <div className={`transition-all duration-500 ${
+        isScrolled ? 'px-8 py-3' : 'max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'
+      }`}>
+        <div className="flex items-center h-14 relative gap-8">
+          
           {/* Logo */}
-          <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent">
+          <Link href="/" className="relative z-10 text-2xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
             MCK
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8">
+          <div className="hidden md:flex space-x-6 relative z-10">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-300 hover:text-white transition-colors duration-200 font-medium"
+                className={`font-medium relative group transition-all duration-300 ${
+                  isScrolled 
+                    ? 'text-white hover:text-blue-400' 
+                    : 'text-gray-300 hover:text-white'
+                }`}
               >
                 {link.label}
               </Link>
