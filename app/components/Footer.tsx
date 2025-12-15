@@ -6,13 +6,18 @@ export default function Footer() {
   const socialLinks = [
     {
       name: 'GitHub',
-      url: 'https://github.com',
+      url: 'https://github.com/MCKesav',
       icon: '🔗',
     },
     {
       name: 'LinkedIn',
-      url: 'https://linkedin.com',
+      url: 'https://www.linkedin.com/in/mckesav',
       icon: '💼',
+    },
+    {
+      name: 'LeetCode',
+      url: 'https://leetcode.com/u/Movva_Chenna_Kesav',
+      icon: '💻',
     },
     {
       name: 'Email',

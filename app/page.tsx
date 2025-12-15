@@ -41,7 +41,7 @@ export default function Home() {
           {/* Social Links */}
           <div className="flex gap-6 justify-center pt-12">
             <a
-              href="https://github.com"
+              href="https://github.com/MCKesav"
               target="_blank"
               rel="noopener noreferrer"
               className="text-3xl hover:text-blue-400 transition-colors transform hover:scale-125 duration-200"
@@ -50,13 +50,22 @@ export default function Home() {
               🔗
             </a>
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/mckesav"
               target="_blank"
               rel="noopener noreferrer"
               className="text-3xl hover:text-blue-400 transition-colors transform hover:scale-125 duration-200"
               title="LinkedIn"
             >
               💼
+            </a>
+            <a
+              href="https://leetcode.com/u/Movva_Chenna_Kesav"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-3xl hover:text-blue-400 transition-colors transform hover:scale-125 duration-200"
+              title="LeetCode"
+            >
+              💻
             </a>
             <a
               href="mailto:movva.chenna.kesav@gmail.com"

@@ -57,19 +57,19 @@ export default function Contact() {
     {
       name: 'GitHub',
       icon: '🔗',
-      url: 'https://github.com',
+      url: 'https://github.com/MCKesav',
       color: 'hover:text-blue-400',
     },
     {
       name: 'LinkedIn',
       icon: '💼',
-      url: 'https://linkedin.com',
+      url: 'https://www.linkedin.com/in/mckesav',
       color: 'hover:text-cyan-400',
     },
     {
       name: 'LeetCode',
       icon: '💻',
-      url: 'https://leetcode.com',
+      url: 'https://leetcode.com/u/Movva_Chenna_Kesav',
       color: 'hover:text-yellow-400',
     },
     {
