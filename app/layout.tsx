@@ -15,10 +15,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://your-domain.vercel.app'), // Update with your actual domain after deployment
   title: "Movva Chenna Kesav | Software Engineer & AI/ML Enthusiast",
   description: "Portfolio showcasing projects, skills, and experience in software engineering and AI/ML",
   keywords: ["portfolio", "software engineer", "AI/ML", "web development"],
   authors: [{ name: "Movva Chenna Kesav" }],
+  openGraph: {
+    title: "Movva Chenna Kesav | Software Engineer & AI/ML Enthusiast",
+    description: "Portfolio showcasing projects, skills, and experience in software engineering and AI/ML",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Movva Chenna Kesav | Software Engineer & AI/ML Enthusiast",
+    description: "Portfolio showcasing projects, skills, and experience in software engineering and AI/ML",
+  },
 };
 
 export default function RootLayout({
