@@ -27,17 +27,6 @@ export default function Contact() {
     const EMAILJS_TEMPLATE_ID = 'template_imbzerk';
     const EMAILJS_PUBLIC_KEY = 'DQcm4x-ZHmZeiFi5S';
 
-    // Check if EmailJS is configured
-    if (EMAILJS_SERVICE_ID === 'YOUR_SERVICE_ID') {
-      // Demo mode - simulate successful submission
-      setTimeout(() => {
-        setStatus('success');
-        setFormData({ name: '', email: '', subject: '', message: '' });
-        setTimeout(() => setStatus('idle'), 5000);
-      }, 1500);
-      return;
-    }
-
     try {
       await emailjs.sendForm(
         EMAILJS_SERVICE_ID,
