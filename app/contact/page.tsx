@@ -1,9 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Image from 'next/image';
+import emailjs from '@emailjs/browser';
+import { motion } from 'framer-motion';
 
 export default function Contact() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -12,17 +15,46 @@ export default function Contact() {
   });
 
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('sending');
+    setErrorMessage('');
 
-    // Simulate form submission (replace with actual email service like EmailJS)
-    setTimeout(() => {
+    // EmailJS configuration
+    const EMAILJS_SERVICE_ID = 'service_r7ndr0t';
+    const EMAILJS_TEMPLATE_ID = 'template_imbzerk';
+    const EMAILJS_PUBLIC_KEY = 'DQcm4x-ZHmZeiFi5S';
+
+    // Check if EmailJS is configured
+    if (EMAILJS_SERVICE_ID === 'YOUR_SERVICE_ID') {
+      // Demo mode - simulate successful submission
+      setTimeout(() => {
+        setStatus('success');
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        setTimeout(() => setStatus('idle'), 5000);
+      }, 1500);
+      return;
+    }
+
+    try {
+      await emailjs.sendForm(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        formRef.current!,
+        EMAILJS_PUBLIC_KEY
+      );
+      
       setStatus('success');
       setFormData({ name: '', email: '', subject: '', message: '' });
-      setTimeout(() => setStatus('idle'), 3000);
-    }, 1500);
+      setTimeout(() => setStatus('idle'), 5000);
+    } catch (error) {
+      console.error('EmailJS error:', error);
+      setStatus('error');
+      setErrorMessage('Failed to send message. Please try again or contact directly via email.');
+      setTimeout(() => setStatus('idle'), 5000);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -84,25 +116,38 @@ export default function Contact() {
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 py-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
           <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent mb-6">
             Get In Touch
           </h1>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
             Have a question or want to work together? Feel free to reach out!
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Information */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             <h2 className="text-3xl font-bold text-white mb-6">Contact Information</h2>
 
             {/* Contact Details */}
             <div className="space-y-4 mb-8">
-              {contactInfo.map((info) => (
-                <div
+              {contactInfo.map((info, index) => (
+                <motion.div
                   key={info.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+                  whileHover={{ scale: 1.02 }}
                   className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-lg p-4 hover:border-blue-500 transition-colors"
                 >
                   <div className="flex items-center gap-4">
@@ -121,21 +166,30 @@ export default function Contact() {
                       )}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
 
             {/* Social Links */}
-            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-lg p-6">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-lg p-6"
+            >
               <h3 className="text-xl font-semibold text-white mb-4">Connect With Me</h3>
               <div className="grid grid-cols-2 gap-4">
-                {socialLinks.map((social) => (
-                  <a
+                {socialLinks.map((social, index) => (
+                  <motion.a
                     key={social.name}
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`flex items-center gap-3 p-4 bg-gradient-to-br from-slate-700/50 to-slate-800/50 rounded-lg transition-all duration-300 hover:scale-105 border border-slate-600/30 backdrop-blur-sm ${social.color}`}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
+                    whileHover={{ scale: 1.05, y: -3 }}
+                    className={`flex items-center gap-3 p-4 bg-gradient-to-br from-slate-700/50 to-slate-800/50 rounded-lg transition-all duration-300 border border-slate-600/30 backdrop-blur-sm ${social.color}`}
                   >
                     <div className="p-2 rounded-lg bg-slate-800/50">
                       <Image
@@ -146,26 +200,39 @@ export default function Contact() {
                       />
                     </div>
                     <span className="text-gray-300 font-medium">{social.name}</span>
-                  </a>
+                  </motion.a>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
             {/* Additional Info */}
-            <div className="mt-8 bg-gradient-to-r from-blue-900/50 to-cyan-900/50 backdrop-blur border border-blue-700/50 rounded-lg p-6">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              className="mt-8 bg-gradient-to-r from-blue-900/50 to-cyan-900/50 backdrop-blur border border-blue-700/50 rounded-lg p-6"
+            >
               <h3 className="text-xl font-semibold text-white mb-3">💡 Quick Response</h3>
               <p className="text-gray-300 text-sm">
                 I typically respond within 24-48 hours. For urgent inquiries, please reach out via email or LinkedIn.
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Contact Form */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
             <h2 className="text-3xl font-bold text-white mb-6">Send a Message</h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
               {/* Name */}
-              <div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 }}
+              >
                 <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
                   Your Name
                 </label>
@@ -179,10 +246,14 @@ export default function Contact() {
                   className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors"
                   placeholder="John Doe"
                 />
-              </div>
+              </motion.div>
 
               {/* Email */}
-              <div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.5 }}
+              >
                 <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
                   Email Address
                 </label>
@@ -196,10 +267,14 @@ export default function Contact() {
                   className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors"
                   placeholder="john@example.com"
                 />
-              </div>
+              </motion.div>
 
               {/* Subject */}
-              <div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.6 }}
+              >
                 <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-2">
                   Subject
                 </label>
@@ -213,10 +288,14 @@ export default function Contact() {
                   className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors"
                   placeholder="Project Inquiry"
                 />
-              </div>
+              </motion.div>
 
               {/* Message */}
-              <div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.7 }}
+              >
                 <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
                   Message
                 </label>
@@ -230,55 +309,81 @@ export default function Contact() {
                   className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors resize-none"
                   placeholder="Tell me about your project or question..."
                 />
-              </div>
+              </motion.div>
 
               {/* Submit Button */}
-              <button
+              <motion.button
                 type="submit"
                 disabled={status === 'sending'}
-                className="w-full px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.8 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                {status === 'sending' ? 'Sending...' : status === 'success' ? '✓ Sent!' : 'Send Message'}
-              </button>
+                {status === 'sending' ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Sending...
+                  </>
+                ) : status === 'success' ? (
+                  <>✓ Sent Successfully!</>
+                ) : (
+                  <>Send Message</>
+                )}
+              </motion.button>
 
               {/* Status Messages */}
               {status === 'success' && (
                 <div className="bg-green-900/50 border border-green-700 rounded-lg p-4 text-green-300 text-center">
-                  Thank you! Your message has been sent successfully.
+                  🎉 Thank you! Your message has been sent successfully. I&apos;ll get back to you soon!
                 </div>
               )}
               {status === 'error' && (
                 <div className="bg-red-900/50 border border-red-700 rounded-lg p-4 text-red-300 text-center">
-                  Oops! Something went wrong. Please try again.
+                  {errorMessage || 'Oops! Something went wrong. Please try again.'}
                 </div>
               )}
             </form>
-          </div>
+          </motion.div>
         </div>
 
         {/* Call to Action */}
-        <div className="mt-16 text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
+          className="mt-16 text-center"
+        >
           <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-lg p-8">
             <h2 className="text-2xl font-bold text-white mb-4">Looking to hire or collaborate?</h2>
             <p className="text-gray-300 mb-6">
               I'm always interested in hearing about new opportunities and interesting projects.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
+              <motion.a
                 href="/resume"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 className="px-6 py-3 border-2 border-blue-400 text-blue-400 font-semibold rounded-lg hover:bg-blue-400/10 transition-all duration-300"
               >
                 View My Resume
-              </a>
-              <a
+              </motion.a>
+              <motion.a
                 href="/projects"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 className="px-6 py-3 border-2 border-cyan-400 text-cyan-400 font-semibold rounded-lg hover:bg-cyan-400/10 transition-all duration-300"
               >
                 See My Work
-              </a>
+              </motion.a>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

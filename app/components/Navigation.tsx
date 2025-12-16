@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import ThemeToggle from './ThemeToggle';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,10 +62,15 @@ export default function Navigation() {
             ))}
           </div>
 
+          {/* Theme Toggle */}
+          <div className="hidden md:block">
+            <ThemeToggle />
+          </div>
+
           {/* Mobile Menu Button */}
           <button
             onClick={toggleMenu}
-            className="md:hidden flex flex-col space-y-1.5 focus:outline-none"
+            className="md:hidden flex flex-col space-y-1.5 focus:outline-none ml-auto"
             aria-label="Toggle menu"
           >
             <span className={`block w-6 h-0.5 bg-white transition-transform ${isOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
@@ -86,6 +92,9 @@ export default function Navigation() {
                 {link.label}
               </Link>
             ))}
+            <div className="pt-2 px-2">
+              <ThemeToggle />
+            </div>
           </div>
         )}
       </div>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
+import ThemeProvider from "./providers/ThemeProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -40,14 +41,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 dark:bg-slate-950 light:bg-gray-50 text-white dark:text-white light:text-gray-900 transition-colors duration-300`}
         suppressHydrationWarning
       >
-        <Navigation />
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
+        <ThemeProvider>
+          <Navigation />
+          <main className="min-h-screen">
+            {children}
+          </main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
