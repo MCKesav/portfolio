@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import emailjs from '@emailjs/browser';
 import { motion } from 'framer-motion';
@@ -17,24 +17,36 @@ export default function Contact() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
+  // EmailJS configuration
+  const EMAILJS_SERVICE_ID = 'service_r7ndr0t';
+  const EMAILJS_TEMPLATE_ID = 'template_imbzerk';
+  const EMAILJS_PUBLIC_KEY = 'DQcm4x-ZHmZeiFi5S';
+
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('sending');
     setErrorMessage('');
 
-    // EmailJS configuration
-    const EMAILJS_SERVICE_ID = 'service_r7ndr0t';
-    const EMAILJS_TEMPLATE_ID = 'template_imbzerk';
-    const EMAILJS_PUBLIC_KEY = 'DQcm4x-ZHmZeiFi5S';
+    if (!formRef.current) {
+      setStatus('error');
+      setErrorMessage('Form reference not found');
+      return;
+    }
 
     try {
-      await emailjs.sendForm(
+      const result = await emailjs.sendForm(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
-        formRef.current!,
+        formRef.current,
         EMAILJS_PUBLIC_KEY
       );
       
+      console.log('EmailJS Success:', result);
       setStatus('success');
       setFormData({ name: '', email: '', subject: '', message: '' });
       setTimeout(() => setStatus('idle'), 5000);
